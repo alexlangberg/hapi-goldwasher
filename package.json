@@ -49,7 +49,9 @@
     "test": "test"
   },
   "dependencies": {
-    "goldwasher": "^3.3.0"
+    "goldwasher": "^3.3.0",
+    "hoek": "^2.13.0",
+    "joi": "^6.4.1"
   },
   "repository": {
     "type": "git",
