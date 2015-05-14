@@ -1,0 +1,60 @@
+{
+  "name": "hapi-goldwasher",
+  "version": "0.0.1",
+  "description": "A plugin for Hapi.js to run goldwasher as a scraping API on the web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "text",
+    "extraction",
+    "mining",
+    "statistics",
+    "metadata",
+    "scraping",
+    "crawling",
+    "hapi",
+    "hapi.js",
+    "plugin"
+  ],
+  "author": "Alex Langberg",
+  "license": "MIT",
+  "devDependencies": {
+    "better-console": "^0.2.4",
+    "chai": "^2.3.0",
+    "chai-things": "^0.2.0",
+    "coveralls": "^2.11.2",
+    "gulp": "^3.8.11",
+    "gulp-batch": "^1.0.5",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-istanbul": "^0.9.0",
+    "gulp-jsdoc": "^0.1.4",
+    "gulp-jshint": "^1.10.0",
+    "gulp-mocha": "^2.0.1",
+    "gulp-spawn-mocha": "^2.0.1",
+    "istanbul": "^0.3.14",
+    "jshint-stylish": "^1.0.2",
+    "mocha": "^2.2.4"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        "hapi-goldwasher/lib"
+      ]
+    }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexlangberg/hapi-goldwasher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexlangberg/hapi-goldwasher/issues"
+  },
+  "homepage": "https://github.com/alexlangberg/hapi-goldwasher"
+}
