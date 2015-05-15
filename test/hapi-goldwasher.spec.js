@@ -6,7 +6,7 @@ var should = chai.should();
 var Hapi = require('hapi');
 var defaultPath = '/goldwasher';
 
-describe('goldwasher plugin with default options', function() {
+describe('setup and routes', function() {
   var server = new Hapi.Server();
   server.connection({port: 7979});
 
@@ -28,27 +28,35 @@ describe('goldwasher plugin with default options', function() {
 
   it('has a working route', function(done) {
     server.inject({method: 'GET', url: defaultPath}, function(response) {
-      console.log(response.result);
+      response.statusCode.should.equal(200);
+      done();
+    });
+  });
+
+  it('can request with url parameter', function(done) {
+    var url = defaultPath + '?url=' + encodeURIComponent('http://www.dr.dk');
+    server.inject({method: 'GET', url: url}, function(response) {
       response.statusCode.should.equal(200);
       done();
     });
   });
 });
 
-describe('goldwasher throws on invalid options', function() {
+describe('options validation', function() {
   var server = new Hapi.Server();
   server.connection({port: 7980});
 
-  it('loads', function(done) {
-    server.register({
-      register: require('../lib/hapi-goldwasher.js'),
-      options: {path: 'dfg'}
-    }, function(error) {
-      console.log('dodndn');
-      console.log('erråå', error);
-
-      //error.should.be.an(Error);
+  it('throws on invalid path', function(done) {
+    try {
+      server.register({
+        register: require('../lib/hapi-goldwasher.js'),
+        options: {path: 'foo'}
+      }, function(error) {
+        throw error;
+      });
+    } catch (error) {
+      should.exist(error);
       done();
-    });
+    }
   });
 });
