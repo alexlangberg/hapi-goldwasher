@@ -47,7 +47,8 @@ describe('setup, routes and queries', function() {
 
   it('loads', function(done) {
     server.register({
-      register: require('../lib/hapi-goldwasher.js')
+      register: require('../lib/hapi-goldwasher.js'),
+      options: { raw: true }
     }, function(error) {
       should.not.exist(error);
       done();
@@ -136,6 +137,18 @@ describe('setup, routes and queries', function() {
     server.inject({method: 'GET', url: url}, function(response) {
       response.statusCode.should.equal(200);
       response.headers['content-type'].should.equal('application/rss+xml');
+      done();
+    });
+  });
+
+  it('can reply with raw', function(done) {
+    var url = urlWithParameters({
+      url: 'http://google.com',
+      output: 'raw'
+    });
+
+    server.inject({method: 'GET', url: url}, function(response) {
+      response.statusCode.should.equal(200);
       done();
     });
   });
