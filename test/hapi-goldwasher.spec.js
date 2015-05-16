@@ -75,7 +75,7 @@ describe('setup, routes and queries', function() {
   });
 
   it('can request with url parameter', function(done) {
-    var url = urlWithParameters({ url: 'http://www.dr.dk'});
+    var url = urlWithParameters({ url: 'http://google.com'});
 
     server.inject({method: 'GET', url: url}, function(response) {
       response.statusCode.should.equal(200);
@@ -85,7 +85,7 @@ describe('setup, routes and queries', function() {
 
   it('can request with all other parameters', function(done) {
     var url = urlWithParameters({
-      url: 'http://www.dr.dk',
+      url: 'http://google.com',
       selector: 'h1',
       search: 'foo',
       output: 'json',
@@ -95,8 +95,47 @@ describe('setup, routes and queries', function() {
       filterLocale: 'en'
     });
 
+    server.inject({ method: 'GET', url: url }, function(response) {
+      response.statusCode.should.equal(200);
+      done();
+    });
+  });
+
+  it('can reply with xml', function(done) {
+    var url = urlWithParameters({
+      url: 'http://google.com',
+      output: 'xml'
+    });
+
     server.inject({method: 'GET', url: url}, function(response) {
       response.statusCode.should.equal(200);
+      response.headers['content-type'].should.equal('text/xml; charset=utf-8');
+      done();
+    });
+  });
+
+  it('can reply with atom', function(done) {
+    var url = urlWithParameters({
+      url: 'http://google.com',
+      output: 'atom'
+    });
+
+    server.inject({method: 'GET', url: url}, function(response) {
+      response.statusCode.should.equal(200);
+      response.headers['content-type'].should.equal('application/atom+xml');
+      done();
+    });
+  });
+
+  it('can reply with rss', function(done) {
+    var url = urlWithParameters({
+      url: 'http://google.com',
+      output: 'rss'
+    });
+
+    server.inject({method: 'GET', url: url}, function(response) {
+      response.statusCode.should.equal(200);
+      response.headers['content-type'].should.equal('application/rss+xml');
       done();
     });
   });
