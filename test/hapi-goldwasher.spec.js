@@ -5,6 +5,7 @@ chai.use(require('chai-things'));
 var should = chai.should();
 var Hapi = require('hapi');
 var defaultPath = '/goldwasher';
+var needle = require('needle');
 
 var urlWithParameters = function(obj) {
   var str = defaultPath + '?';
@@ -21,7 +22,26 @@ var urlWithParameters = function(obj) {
   return str;
 };
 
-describe('setup and routes', function() {
+describe('options validation', function() {
+  var server = new Hapi.Server();
+  server.connection({port: 7979});
+
+  it('throws on invalid path', function(done) {
+    try {
+      server.register({
+        register: require('../lib/hapi-goldwasher.js'),
+        options: {path: 'foo'}
+      }, function(error) {
+        throw error;
+      });
+    } catch (error) {
+      should.exist(error);
+      done();
+    }
+  });
+});
+
+describe('setup, routes and queries', function() {
   var server = new Hapi.Server();
   server.connection({port: 7979});
 
@@ -56,7 +76,7 @@ describe('setup and routes', function() {
 
   it('can request with url parameter', function(done) {
     var url = urlWithParameters({ url: 'http://www.dr.dk'});
-    //console.log(url);
+
     server.inject({method: 'GET', url: url}, function(response) {
       response.statusCode.should.equal(200);
       done();
@@ -74,30 +94,56 @@ describe('setup and routes', function() {
       filterTexts: 'bar is good, baz is evil',
       filterLocale: 'en'
     });
-    //console.log(url);
+
     server.inject({method: 'GET', url: url}, function(response) {
-      //console.log(response.result);
       response.statusCode.should.equal(200);
       done();
     });
   });
 });
 
-describe('options validation', function() {
+describe('error handling', function() {
   var server = new Hapi.Server();
   server.connection({port: 7979});
 
-  it('throws on invalid path', function(done) {
-    try {
-      server.register({
-        register: require('../lib/hapi-goldwasher.js'),
-        options: {path: 'foo'}
-      }, function(error) {
-        throw error;
+  before(function(done) {
+    server.register({
+      register: require('../lib/hapi-goldwasher.js'),
+      options: { maxRedirects: 0 }
+    }, function() {
+      server.start(function() {
+        done();
       });
-    } catch (error) {
-      should.exist(error);
+    });
+  });
+
+  it('can can handle invalid url', function(done) {
+    var url = urlWithParameters({ url: 'foo'});
+
+    server.inject({method: 'GET', url: url}, function(response) {
+      response.statusCode.should.equal(404);
       done();
-    }
+    });
+  });
+
+  it('can can handle too many redirects', function(done) {
+    var url = urlWithParameters({ url: 'http://google.com'});
+
+    server.inject({method: 'GET', url: url}, function(response) {
+      response.statusCode.should.equal(404);
+      done();
+    });
+  });
+
+  it('prevents recursive calls', function(done) {
+    var url = server.info.uri +
+      urlWithParameters({ url: server.info.uri}) +
+      defaultPath;
+
+    needle.get(url, function(error, response, body) {
+      body.statusCode.should.equal(403);
+      body.message.should.equal('http://bit.ly/IqT6zt');
+      done();
+    });
   });
 });
