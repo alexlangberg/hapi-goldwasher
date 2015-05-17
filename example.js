@@ -9,7 +9,10 @@ server.connection({ port: 7979 });
 server.register({
   register: HapiGoldwasher,
   options: {
-    path: '/goldwasher'
+    path: '/goldwasher',
+    cors: {
+      origin: ['*']
+    }
   }
 }, function(err) {
   if (err) {

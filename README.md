@@ -39,7 +39,7 @@ When registering the plugin with [hapi](https://www.npmjs.com/package/hapi), you
 ## Example
 ```javascript
 var Hapi = require('hapi');
-var HapiGoldwasher = require('hapi-goldwasher');
+var HapiGoldwasher = require('./index');
 
 var server = new Hapi.Server();
 server.connection({ port: 7979 });
@@ -47,7 +47,10 @@ server.connection({ port: 7979 });
 server.register({
   register: HapiGoldwasher,
   options: {
-    path: '/goldwasher'
+    path: '/goldwasher',
+    cors: {
+      origin: ['*']
+    }
   }
 }, function(err) {
   if (err) {
