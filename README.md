@@ -20,10 +20,10 @@ npm install hapi
 ```
 
 ## Options
-When registering the plugin with [hapi docs](https://www.npmjs.com/package/hapi), you have several options, non of them required:
+When registering the plugin with [hapi](https://www.npmjs.com/package/hapi), you have several options, non of them required:
 - ```path``` - the endpoint you mount the plugin on. Defaults to ```/goldwasher```.
 - ```maxRedirects``` - the maximum number of redirects the scraper will accept before giving up. Defaults to ```5```.
-- ```cors``` - a CORS object. Defaults to ```false```. See [hapi](http://hapijs.com/api#route-options) for more information.
+- ```cors``` - a CORS object. Defaults to ```false```. See [hapi docs](http://hapijs.com/api#route-options) for more information.
 - ```raw``` - enable raw output mode. This will enable ```output=raw``` that will return the raw, scraped result, usually HTML.
 
 ## Parameters
