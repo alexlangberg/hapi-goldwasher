@@ -1,6 +1,6 @@
 {
   "name": "hapi-goldwasher",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A plugin for Hapi.js to run goldwasher as a scraping API on the web.",
   "main": "index.js",
   "scripts": {
